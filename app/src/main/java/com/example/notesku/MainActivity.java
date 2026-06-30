@@ -2,6 +2,9 @@ package com.example.notesku;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
@@ -20,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerView recyclerView;
     private FloatingActionButton fabAdd;
     private CardView cardAbout;
+    private EditText searchView;
 
     private DatabaseHelper databaseHelper;
     private NoteAdapter adapter;
@@ -34,28 +38,70 @@ public class MainActivity extends AppCompatActivity {
         recyclerView = findViewById(R.id.recyclerView);
         fabAdd = findViewById(R.id.fabAdd);
         cardAbout = findViewById(R.id.cardAbout);
+        searchView = findViewById(R.id.searchView);
 
-        // Inisialisasi Database
+        // Database
         databaseHelper = new DatabaseHelper(this);
 
-        // Mengambil semua data dari SQLite
+        // Ambil data
         noteList = databaseHelper.getAllNotes();
 
-        // Menampilkan data ke RecyclerView
+        // Adapter
         adapter = new NoteAdapter(this, noteList);
+
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
 
-        // Tombol Tambah Catatan
+        // Tambah Catatan
         fabAdd.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, AddNoteActivity.class);
+
+            Intent intent = new Intent(
+                    MainActivity.this,
+                    AddNoteActivity.class);
+
             startActivity(intent);
+
         });
 
-        // Tombol About
+        // About
         cardAbout.setOnClickListener(v -> {
-            Intent intent = new Intent(MainActivity.this, AboutActivity.class);
+
+            Intent intent = new Intent(
+                    MainActivity.this,
+                    AboutActivity.class);
+
             startActivity(intent);
+
+        });
+
+        // =============================
+        // SEARCH
+        // =============================
+
+        searchView.addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void beforeTextChanged(CharSequence s,
+                                          int start,
+                                          int count,
+                                          int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s,
+                                      int start,
+                                      int before,
+                                      int count) {
+
+                adapter.filter(s.toString());
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
         });
 
     }
@@ -64,9 +110,14 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        noteList.clear();
-        noteList.addAll(databaseHelper.getAllNotes());
+        adapter.updateData(databaseHelper.getAllNotes());
 
-        adapter.notifyDataSetChanged();
+        if(searchView != null){
+
+            adapter.filter(searchView.getText().toString());
+
+        }
+
     }
+
 }

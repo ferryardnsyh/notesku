@@ -18,18 +18,27 @@ import com.example.notesku.DetailActivity;
 import com.example.notesku.R;
 import com.example.notesku.database.Note;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder> {
 
     private Context context;
+
+    // Data yang ditampilkan
     private List<Note> noteList;
 
-    public NoteAdapter(Context context, List<Note> noteList) {
-        this.context = context;
-        this.noteList = noteList;
-    }
+    // Seluruh data (untuk search)
+    private List<Note> fullList;
 
+    public NoteAdapter(Context context, List<Note> noteList) {
+
+        this.context = context;
+
+        this.noteList = new ArrayList<>(noteList);
+        this.fullList = new ArrayList<>(noteList);
+
+    }
 
     @NonNull
     @Override
@@ -52,7 +61,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
         holder.txtCategory.setText(note.getCategory());
         holder.txtDate.setText(note.getCreatedAt());
 
-        // Menampilkan indikator Voice Note
+        // Voice Note
         if (note.getAudioPath() == null || note.getAudioPath().isEmpty()) {
 
             holder.layoutAudio.setVisibility(View.GONE);
@@ -63,7 +72,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
 
         }
 
-        // Animasi Card
+        // Animasi
         Animation animation = AnimationUtils.loadAnimation(
                 context,
                 R.anim.item_animation
@@ -71,7 +80,7 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
 
         holder.itemView.startAnimation(animation);
 
-        // Buka Detail
+        // Klik Card
         holder.itemView.setOnClickListener(v -> {
 
             Intent intent = new Intent(context, DetailActivity.class);
@@ -93,6 +102,70 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
     public int getItemCount() {
         return noteList.size();
     }
+
+    // ==========================
+    // UPDATE DATA
+    // ==========================
+
+    public void updateData(List<Note> newList) {
+
+        noteList.clear();
+        noteList.addAll(newList);
+
+        fullList.clear();
+        fullList.addAll(newList);
+
+        notifyDataSetChanged();
+
+    }
+
+    // ==========================
+    // SEARCH
+    // ==========================
+
+    public void filter(String keyword) {
+
+        noteList.clear();
+
+        if (keyword == null || keyword.trim().isEmpty()) {
+
+            noteList.addAll(fullList);
+
+        } else {
+
+            keyword = keyword.toLowerCase().trim();
+
+            for (Note note : fullList) {
+
+                boolean title =
+                        note.getTitle() != null &&
+                                note.getTitle().toLowerCase().contains(keyword);
+
+                boolean content =
+                        note.getContent() != null &&
+                                note.getContent().toLowerCase().contains(keyword);
+
+                boolean category =
+                        note.getCategory() != null &&
+                                note.getCategory().toLowerCase().contains(keyword);
+
+                if (title || content || category) {
+
+                    noteList.add(note);
+
+                }
+
+            }
+
+        }
+
+        notifyDataSetChanged();
+
+    }
+
+    // ==========================
+    // VIEW HOLDER
+    // ==========================
 
     public static class NoteViewHolder extends RecyclerView.ViewHolder {
 
@@ -119,4 +192,5 @@ public class NoteAdapter extends RecyclerView.Adapter<NoteAdapter.NoteViewHolder
             layoutAudio = itemView.findViewById(R.id.layoutAudio);
         }
     }
+
 }
