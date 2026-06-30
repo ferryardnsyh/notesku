@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Primary -->
+    <color name="primary">#3B82F6</color>
+    <color name="primaryDark">#2563EB</color>
+    <color name="primaryLight">#DBEAFE</color>
+
+    <!-- Secondary -->
+    <color name="secondary">#06B6D4</color>
+
+    <!-- Background -->
+    <color name="background">#F5F7FA</color>
+
+    <!-- Card -->
+    <color name="card">#FFFFFF</color>
+
+    <!-- Text -->
+    <color name="textPrimary">#111827</color>
+    <color name="textSecondary">#6B7280</color>
+
+    <!-- Border -->
+    <color name="border">#E5E7EB</color>
+
+    <!-- Success -->
+    <color name="success">#22C55E</color>
+
+    <!-- Danger -->
+    <color name="danger">#EF4444</color>
+
+    <!-- Warning -->
+    <color name="warning">#F59E0B</color>
+
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+
+</resources>

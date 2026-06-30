@@ -1,0 +1,18 @@
+<resources>
+
+    <string name="app_name">NotesKu</string>
+
+    <string name="detail_title">Detail Catatan</string>
+    <string name="detail_desc">Lihat informasi lengkap catatan</string>
+
+    <string name="voice_note">🎤 Voice Note</string>
+    <string name="audio_available">Rekaman tersedia</string>
+
+    <string name="play">Play</string>
+    <string name="stop">Stop</string>
+
+    <string name="edit_note">Edit Catatan</string>
+    <string name="delete_note">Hapus Catatan</string>
+    <string name="search_note">Cari catatan...</string>
+    <string name="add_note">Tambah Catatan</string>
+</resources>
